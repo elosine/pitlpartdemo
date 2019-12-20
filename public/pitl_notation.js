@@ -35,10 +35,11 @@ var sb = true;
 var statusbar = document.getElementById('statusbar');
 // GO FRET /////////////////////////////////////////////
 var TRDISTFROMCTR = 200;
-var GOFRETLENGTH = 36;
+var TRDISTFROMCTR = 0;
+var GOFRETLENGTH = 50;
 var GOFRETHEIGHT = 14;
 var GOFRETPOSZ = -GOFRETLENGTH / 2;
-var GOFRETWIDTH = (TRDISTFROMCTR * 2) - 60;
+var GOFRETWIDTH = 500;
 var goFretLMatl = new THREE.MeshLambertMaterial({
   color: clr_neonGreen
 });
@@ -63,7 +64,7 @@ var eventGoGeom = new THREE.CubeGeometry(EVENTGOWIDTH, EVENTGOHEIGHT, EVENTGOLEN
 var eventGoBigGeom = new THREE.CubeGeometry(EVENTGOWIDTH + 5, EVENTGOHEIGHT + 5, EVENTGOLENGTH + 5);
 var eventGoL, eventGoR;
 // TEMPO FRETS ///////////////////////////////////////////////
-var TEMPOFRETLENGTH = 36;
+var TEMPOFRETLENGTH = 50;
 var TEMPOFRETHEIGHT = 15;
 var TEMPOFRETWIDTH = GOFRETWIDTH;
 var tempoFretMatl = new THREE.MeshLambertMaterial({
@@ -85,7 +86,13 @@ var eventsL = [
   [0, 3],
   [0, 4],
   [0, 5],
-  [1, 3.37]
+  [0, 6],
+  [0, 7],
+  [0, 8],
+  [0, 9],
+  [0, 10],
+  [0, 11],
+  [0, 12]
 ];
 var eventsR = [
   [0, 2.5],
@@ -156,47 +163,43 @@ function createScene() {
   tr1.position.y = -trdiameter / 2;
   tr1.position.x = -TRDISTFROMCTR;
   scene.add(tr1);
-  var tr2 = new THREE.Mesh(trgeom, trmatl);
-  tr2.rotation.x = rads(-90);
-  tr2.position.z = -(RUNWAYLENGTH / 2);
-  tr2.position.y = -trdiameter / 2;
-  tr2.position.x = TRDISTFROMCTR;
-  scene.add(tr2);
+  // var tr2 = new THREE.Mesh(trgeom, trmatl);
+  // tr2.rotation.x = rads(-90);
+  // tr2.position.z = -(RUNWAYLENGTH / 2);
+  // tr2.position.y = -trdiameter / 2;
+  // tr2.position.x = TRDISTFROMCTR;
+  // scene.add(tr2);
   // GO FRET ////////////////////////////////////////////
   goFretL = new THREE.Mesh(goFretGeom, goFretLMatl);
   goFretL.position.z = GOFRETPOSZ;
   goFretL.position.y = GOFRETHEIGHT;
   goFretL.position.x = -TRDISTFROMCTR;
   scene.add(goFretL);
-  goFretR = new THREE.Mesh(goFretGeom, goFretRMatl);
-  goFretR.position.z = GOFRETPOSZ;
-  goFretR.position.y = GOFRETHEIGHT;
-  goFretR.position.x = TRDISTFROMCTR;
-  scene.add(goFretR);
+  // goFretR = new THREE.Mesh(goFretGeom, goFretRMatl);
+  // goFretR.position.z = GOFRETPOSZ;
+  // goFretR.position.y = GOFRETHEIGHT;
+  // goFretR.position.x = TRDISTFROMCTR;
+  // scene.add(goFretR);
   // EVENT GO ///////////////////////////////////////////////
-  eventGoL = new THREE.Mesh(eventGoGeom, eventGoLMatl);
-  eventGoL.position.z = EVENTGOPOSZ;
-  eventGoL.position.y = EVENTGOHEIGHT;
-  eventGoL.position.x = -TRDISTFROMCTR;
-  scene.add(eventGoL);
-  eventGoR = new THREE.Mesh(eventGoGeom, eventGoRMatl);
-  eventGoR.position.z = EVENTGOPOSZ;
-  eventGoR.position.y = EVENTGOHEIGHT;
-  eventGoR.position.x = TRDISTFROMCTR;
-  scene.add(eventGoR);
+  // eventGoL = new THREE.Mesh(eventGoGeom, eventGoLMatl);
+  // eventGoL.position.z = EVENTGOPOSZ;
+  // eventGoL.position.y = EVENTGOHEIGHT;
+  // eventGoL.position.x = -TRDISTFROMCTR;
+  // scene.add(eventGoL);
+  // eventGoR = new THREE.Mesh(eventGoGeom, eventGoRMatl);
+  // eventGoR.position.z = EVENTGOPOSZ;
+  // eventGoR.position.y = EVENTGOHEIGHT;
+  // eventGoR.position.x = TRDISTFROMCTR;
+  // scene.add(eventGoR);
   // SVG NOTATION ///////////////////////////////////////////////
   testpitch.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '/svgs/fs5.svg');
-  // testpitch.setAttributeNS(null, 'x', 50);
-  // testpitch.setAttributeNS(null, 'y', 50);
-  testpitch.setAttributeNS(null, 'width', 250);
-  testpitch.setAttributeNS(null, 'height', 250);
+  testpitch.setAttributeNS(null, 'width', 320);
+  testpitch.setAttributeNS(null, 'height', 385);
   testpitch.setAttributeNS(null, 'visibility', 'visible');
   document.getElementById("notationLSVG").appendChild(testpitch);
   testpitch2.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '/svgs/aqf5.svg');
-  // testpitch.setAttributeNS(null, 'x', 50);
-  // testpitch.setAttributeNS(null, 'y', 50);
-  testpitch2.setAttributeNS(null, 'width', 250);
-  testpitch2.setAttributeNS(null, 'height', 250);
+  testpitch2.setAttributeNS(null, 'width', 320);
+  testpitch2.setAttributeNS(null, 'height', 385);
   testpitch2.setAttributeNS(null, 'visibility', 'visible');
   document.getElementById("notationRSVG").appendChild(testpitch2);
   // RENDER /////////////////////////////////////////////
@@ -243,69 +246,69 @@ function update(MSPERFRAME) {
     }
   }
   //// EVENTS LEFT ////////////////////////////////////////
-  for (var i = 0; i < eventSectionL[1].length; i++) {
-    //add the tf to the scene if it is on the runway
-    if (eventSectionL[1][i][1].position.z > (-RUNWAYLENGTH)) {
-      if (eventSectionL[1][i][0]) {
-        eventSectionL[1][i][0] = false;
-        scene.add(eventSectionL[1][i][1]);
-      }
-    }
-    //advance tf if it is not past gofret
-    if (eventSectionL[1][i][1].position.z < GOFRETPOSZ) {
-      eventSectionL[1][i][1].position.z += PXPERFRAME;
-    }
-    //When tf reaches goline, blink and remove
-    if (framect == eventSectionL[1][i][2]) {
-      eventGoTimerL = framect + 15;
-      //remove tf from scene and array
-      scene.remove(scene.getObjectByName(eventSectionL[1][i][1].name));
-      eventSectionL[1].splice(i, 1); //fix this
-    }
-  }
+  // for (var i = 0; i < eventSectionL[1].length; i++) {
+  //   //add the tf to the scene if it is on the runway
+  //   if (eventSectionL[1][i][1].position.z > (-RUNWAYLENGTH)) {
+  //     if (eventSectionL[1][i][0]) {
+  //       eventSectionL[1][i][0] = false;
+  //       scene.add(eventSectionL[1][i][1]);
+  //     }
+  //   }
+  //   //advance tf if it is not past gofret
+  //   if (eventSectionL[1][i][1].position.z < GOFRETPOSZ) {
+  //     eventSectionL[1][i][1].position.z += PXPERFRAME;
+  //   }
+  //   //When tf reaches goline, blink and remove
+  //   if (framect == eventSectionL[1][i][2]) {
+  //     eventGoTimerL = framect + 15;
+  //     //remove tf from scene and array
+  //     scene.remove(scene.getObjectByName(eventSectionL[1][i][1].name));
+  //     eventSectionL[1].splice(i, 1); //fix this
+  //   }
+  // }
   // EVENTS SECTION RIGHT /////////////////////////////////////
   //// TEMPO FRETS RIGHT  /////////////////////////////////////
-  for (var i = 0; i < eventSectionR[0].length; i++) {
-    //add the tf to the scene if it is on the runway
-    if (eventSectionR[0][i][1].position.z > (-RUNWAYLENGTH)) {
-      if (eventSectionR[0][i][0]) {
-        eventSectionR[0][i][0] = false;
-        scene.add(eventSectionR[0][i][1]);
-      }
-    }
-    //advance tf if it is not past gofret
-    if (eventSectionR[0][i][1].position.z < GOFRETPOSZ) {
-      eventSectionR[0][i][1].position.z += PXPERFRAME;
-    }
-    //When tf reaches goline, blink and remove
-    if (framect == eventSectionR[0][i][2]) {
-      goFretTimerR = framect + 15;
-      //remove tf from scene and array
-      scene.remove(scene.getObjectByName(eventSectionR[0][i][1].name));
-      eventSectionR[0].splice(i, 1);
-    }
-  }
-  //// EVENTS RIGHT  /////////////////////////////////////
-  for (var i = 0; i < eventSectionR[1].length; i++) {
-    //add the tf to the scene if it is on the runway
-    if (eventSectionR[1][i][1].position.z > (-RUNWAYLENGTH)) {
-      if (eventSectionR[1][i][0]) {
-        eventSectionR[1][i][0] = false;
-        scene.add(eventSectionR[1][i][1]);
-      }
-    }
-    //advance tf if it is not past gofret
-    if (eventSectionR[1][i][1].position.z < GOFRETPOSZ) {
-      eventSectionR[1][i][1].position.z += PXPERFRAME;
-    }
-    //When tf reaches goline, blink and remove
-    if (framect == eventSectionR[1][i][2]) {
-      eventGoTimerR = framect + 15;
-      //remove tf from scene and array
-      scene.remove(scene.getObjectByName(eventSectionR[1][i][1].name));
-      eventSectionR[1].splice(i, 1);
-    }
-  }
+  // for (var i = 0; i < eventSectionR[0].length; i++) {
+  //   //add the tf to the scene if it is on the runway
+  //   if (eventSectionR[0][i][1].position.z > (-RUNWAYLENGTH)) {
+  //     if (eventSectionR[0][i][0]) {
+  //       eventSectionR[0][i][0] = false;
+  //       scene.add(eventSectionR[0][i][1]);
+  //     }
+  //   }
+  //   //advance tf if it is not past gofret
+  //   if (eventSectionR[0][i][1].position.z < GOFRETPOSZ) {
+  //     eventSectionR[0][i][1].position.z += PXPERFRAME;
+  //   }
+  //   //When tf reaches goline, blink and remove
+  //   if (framect == eventSectionR[0][i][2]) {
+  //     goFretTimerR = framect + 15;
+  //     //remove tf from scene and array
+  //     scene.remove(scene.getObjectByName(eventSectionR[0][i][1].name));
+  //     eventSectionR[0].splice(i, 1);
+  //   }
+  // }
+  // //// EVENTS RIGHT  /////////////////////////////////////
+  // for (var i = 0; i < eventSectionR[1].length; i++) {
+  //   //add the tf to the scene if it is on the runway
+  //   if (eventSectionR[1][i][1].position.z > (-RUNWAYLENGTH)) {
+  //     if (eventSectionR[1][i][0]) {
+  //       eventSectionR[1][i][0] = false;
+  //       scene.add(eventSectionR[1][i][1]);
+  //     }
+  //   }
+  //   //advance tf if it is not past gofret
+  //   if (eventSectionR[1][i][1].position.z < GOFRETPOSZ) {
+  //     eventSectionR[1][i][1].position.z += PXPERFRAME;
+  //   }
+  //   //When tf reaches goline, blink and remove
+  //   if (framect == eventSectionR[1][i][2]) {
+  //     eventGoTimerR = framect + 15;
+  //     //remove tf from scene and array
+  //     scene.remove(scene.getObjectByName(eventSectionR[1][i][1].name));
+  //     eventSectionR[1].splice(i, 1);
+  //   }
+  // }
 }
 // DRAW ---------------------------------------------------------------- //
 function draw() {
@@ -317,28 +320,28 @@ function draw() {
     goFretL.material.color = clr_safetyOrange;
     goFretL.geometry = goFretBigGeom;
   }
-  if (framect >= goFretTimerR) {
-    goFretR.material.color = clr_yellow;
-    goFretR.geometry = goFretGeom;
-  } else {
-    goFretR.material.color = clr_safetyOrange;
-    goFretR.geometry = goFretBigGeom;
-  }
+  // if (framect >= goFretTimerR) {
+  //   goFretR.material.color = clr_yellow;
+  //   goFretR.geometry = goFretGeom;
+  // } else {
+  //   goFretR.material.color = clr_safetyOrange;
+  //   goFretR.geometry = goFretBigGeom;
+  // }
   // EVENT BLINK TIMER ///////////////////////////////////
-  if (framect >= eventGoTimerL) {
-    eventGoL.material.color = clr_neonGreen;
-    eventGoL.geometry = eventGoGeom;
-  } else {
-    eventGoL.material.color = clr_red;
-    eventGoL.geometry = eventGoBigGeom;
-  }
-  if (framect >= eventGoTimerR) {
-    eventGoR.material.color = clr_neonGreen;
-    eventGoR.geometry = eventGoGeom;
-  } else {
-    eventGoR.material.color = clr_red;
-    eventGoR.geometry = eventGoBigGeom;
-  }
+  // if (framect >= eventGoTimerL) {
+  //   eventGoL.material.color = clr_neonGreen;
+  //   eventGoL.geometry = eventGoGeom;
+  // } else {
+  //   eventGoL.material.color = clr_red;
+  //   eventGoL.geometry = eventGoBigGeom;
+  // }
+  // if (framect >= eventGoTimerR) {
+  //   eventGoR.material.color = clr_neonGreen;
+  //   eventGoR.geometry = eventGoGeom;
+  // } else {
+  //   eventGoR.material.color = clr_red;
+  //   eventGoR.geometry = eventGoBigGeom;
+  // }
   // RENDER ///////////////////////////////////
   renderer.render(scene, camera);
 }
